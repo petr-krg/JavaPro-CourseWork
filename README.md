@@ -1,2 +1,2 @@
 # JavaPro-CourseWork
-Курсвовой проект программы *Java Developer Professional* от *OTUS*
+Курсвовой проект программы **Java Developer Professional** от **OTUS**

@@ -1,2 +1,2 @@
-# JavaPro-CourseWork
-Курсвовой проект программы **[Java Developer Professional](https://otus.ru/lessons/java-professional/)** от **[OTUS](https://otus.ru/)**
+# JavaSpring-OTUS
+Выполнение домашних работ курса **[Разработчик на Spring Framework](https://otus.ru/lessons/java-professional/)** от **[OTUS](https://otus.ru/)**

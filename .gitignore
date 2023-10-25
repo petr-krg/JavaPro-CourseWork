@@ -22,3 +22,12 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+/hw02-annotation-config/dependency-reduced-pom.xml
+/hw02-annotation-config/.idea/.gitignore
+/hw02-annotation-config/.idea/compiler.xml
+/hw02-annotation-config/.idea/encodings.xml
+/hw02-annotation-config/.idea/inspectionProfiles/Project_Default.xml
+/hw02-annotation-config/.idea/jarRepositories.xml
+/hw02-annotation-config/.idea/misc.xml
+/hw02-annotation-config/.idea/uiDesigner.xml
+/hw02-annotation-config/.idea/vcs.xml

@@ -1,6 +1,7 @@
 package krg.petr.otusru.service;
 
 import krg.petr.otusru.dao.QuestionDao;
+import krg.petr.otusru.domain.Question;
 import krg.petr.otusru.domain.Student;
 import krg.petr.otusru.domain.TestResult;
 import lombok.RequiredArgsConstructor;
@@ -24,20 +25,24 @@ public class TestServiceImpl implements TestService {
 
         for (var question: questions) {
             var isAnswerValid = false;
-            var answerCount = question.getAnswers().size();
             ioService.printLine(question.getText());
-            for (int i = 0; i < answerCount; i++) {
+
+            for (int i = 0; i < question.getAnswers().size(); i++) {
                 ioService.printFormattedLine("%d) %s", i + 1, question.getAnswers().get(i).getText());
             }
 
-            var answerNumber = ioService.readIntForRangeWithPrompt(1, answerCount,
-                    "Enter your answer number: ",
-                    String.format(
-                            "Your input is invalid. Please provide a number within the specified range, from 1 to %d!",
-                            answerCount));
-            isAnswerValid = question.answers().get(--answerNumber).isCorrect();
+            isAnswerValid = getUserAnswerAndValidate(question);
             testResult.applyAnswer(question, isAnswerValid);
         }
         return testResult;
+    }
+
+    private boolean getUserAnswerAndValidate(Question question) {
+        var answerNumber = ioService.readIntForRangeWithPrompt(1, question.getAnswers().size(),
+                "Enter your answer number: ",
+                String.format(
+                        "Your input is invalid. Please provide a number within the specified range, from 1 to %d!",
+                        question.getAnswers().size()));
+        return question.answers().get(--answerNumber).isCorrect();
     }
 }

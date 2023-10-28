@@ -1,11 +1,11 @@
 package krg.petr.otusru.service;
 
-
 import krg.petr.otusru.domain.Student;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -20,7 +20,8 @@ public class StudentServiceImplTest {
     @Mock
     private IOService ioService;
 
-    private StudentService studentService;
+    @InjectMocks
+    private StudentServiceImpl studentService;
 
     @BeforeEach
     void setUp() {
@@ -31,7 +32,6 @@ public class StudentServiceImplTest {
     @Test
     @DisplayName("Create Correct Student")
     public void createCorrectStudent() {
-        studentService = new StudentServiceImpl(ioService);
         Student expectedStudent = studentService.determineCurrentStudent();
         assertAll(
                 () -> assertEquals("Joshua", expectedStudent.firstName()),

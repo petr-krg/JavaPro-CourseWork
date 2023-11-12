@@ -21,11 +21,17 @@ import java.util.Locale;
 public class ApplicationCommands {
 
     private final AppConfig appConfig;
+    
     private final TestRunnerService runnerService;
+    
     private final StudentService studentService;
+    
     private final ResultService resultService;
+    
     private final MessageSource messageSource;
+    
     private TestResult testResult;
+    
     private Student student;
 
     @Autowired

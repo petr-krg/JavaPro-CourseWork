@@ -4,5 +4,5 @@ import krg.petr.otusru.domain.Student;
 
 public interface TestRunnerService {
 
-    void run(Student student);
+    TestResult run(Student student);
 }

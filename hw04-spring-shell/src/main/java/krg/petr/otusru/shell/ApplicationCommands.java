@@ -69,8 +69,7 @@ public class ApplicationCommands {
     @ShellMethod(value = "Run test command", key = {"r", "run"})
     @ShellMethodAvailability(value = "isRunTestCommandAvailable")
     public void runTest() {
-        runnerService.run(student);
-        testResult = new TestResult(student);
+        testResult = runnerService.run(student);
     }
 
     @ShellMethod(value = "Show test result command", key = "str")

@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TestRunnerServiceImpl implements TestRunnerService {
 
+    private final TestService testService;
+
     @Override
-    public void run(Student student) {
+    public TestResult run(Student student) {
 
-
+        return testResult = testService.executeTestFor(student);
     }
 }

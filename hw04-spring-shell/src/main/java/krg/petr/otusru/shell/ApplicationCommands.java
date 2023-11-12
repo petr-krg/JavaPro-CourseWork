@@ -51,7 +51,7 @@ public class ApplicationCommands {
     }
 
     @ShellMethod(value = "About command", key = {"a", "about"})
-    public String about(){
+    public String about() {
         return getLocalizeText("command.about");
     }
 

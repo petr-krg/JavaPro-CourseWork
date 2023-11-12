@@ -70,12 +70,12 @@ public class ApplicationCommands {
     @ShellMethodAvailability(value = "isRunTestCommandAvailable")
     public void runTest() {
         runnerService.run(student);
+        testResult = new TestResult(student);
     }
 
     @ShellMethod(value = "Show test result command", key = "str")
     @ShellMethodAvailability(value = "isShowTestResultCommandAvailable")
     public void showResultTest() {
-        testResult = new TestResult(student);
         resultService.showResult(testResult);
     }
 

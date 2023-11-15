@@ -75,8 +75,9 @@ public class ApplicationCommands {
 
     @ShellMethod(value = "Show test result command", key = "str")
     @ShellMethodAvailability(value = "isShowTestResultCommandAvailable")
-    public void showResultTest() {
+    public String showResultTest() {
         resultService.showResult(testResult);
+        return "";
     }
 
     @ShellMethod(value = "Exit the application", key = {"x", "exit"})

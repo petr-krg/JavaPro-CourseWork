@@ -1,6 +1,7 @@
 package krg.petr.otusru.service;
 
 import krg.petr.otusru.domain.Student;
+import krg.petr.otusru.domain.TestResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,6 @@ public class TestRunnerServiceImpl implements TestRunnerService {
     @Override
     public TestResult run(Student student) {
 
-        return testResult = testService.executeTestFor(student);
+        return testService.executeTestFor(student);
     }
 }

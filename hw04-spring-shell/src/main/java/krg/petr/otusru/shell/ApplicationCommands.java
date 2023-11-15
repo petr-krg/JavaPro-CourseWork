@@ -7,13 +7,13 @@ import krg.petr.otusru.service.TestRunnerService;
 import krg.petr.otusru.service.StudentService;
 import krg.petr.otusru.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.shell.Availability;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
 import org.springframework.shell.standard.ShellOption;
-
 import java.util.Locale;
 
 
@@ -21,7 +21,7 @@ import java.util.Locale;
 public class ApplicationCommands {
 
     private final AppConfig appConfig;
-    
+
     private final TestRunnerService runnerService;
     
     private final StudentService studentService;
@@ -35,7 +35,7 @@ public class ApplicationCommands {
     private Student student;
 
     @Autowired
-    public ApplicationCommands(AppConfig appConfig, TestRunnerService runnerService, StudentService studentService,
+    public ApplicationCommands(AppConfig appConfig, ConfigurableApplicationContext context, TestRunnerService runnerService, StudentService studentService,
                                ResultService resultService, MessageSource messageSource) {
         this.appConfig = appConfig;
         this.runnerService = runnerService;
@@ -59,6 +59,7 @@ public class ApplicationCommands {
     @ShellMethod(value = "About command", key = {"a", "about"})
     public String about() {
         return getLocalizeText("command.about");
+
     }
 
     @ShellMethod(value = "Login command", key = {"l", "login"})
@@ -76,6 +77,11 @@ public class ApplicationCommands {
     @ShellMethodAvailability(value = "isShowTestResultCommandAvailable")
     public void showResultTest() {
         resultService.showResult(testResult);
+    }
+
+    @ShellMethod(value = "Exit the application", key = {"x", "exit"})
+    public void exitApplication() {
+        System.exit(0);
     }
 
     private Availability isRunTestCommandAvailable() {

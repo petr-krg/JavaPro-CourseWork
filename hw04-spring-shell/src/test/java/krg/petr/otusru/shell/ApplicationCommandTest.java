@@ -5,6 +5,7 @@ import krg.petr.otusru.domain.Student;
 import krg.petr.otusru.domain.TestResult;
 import krg.petr.otusru.service.ResultService;
 import krg.petr.otusru.service.StudentService;
+import krg.petr.otusru.service.TestRunnerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -29,6 +30,8 @@ public class ApplicationCommandTest {
     @Mock
     private ResultService resultService;
     @Mock
+    private TestRunnerService runnerService;
+    @Mock
     private MessageSource messageSource;
 
     @InjectMocks
@@ -38,6 +41,8 @@ public class ApplicationCommandTest {
     void SetUp() {
         when(messageSource.getMessage(anyString(), any(), any(Locale.class)))
                 .thenAnswer(i -> String.format("Mocked message for %s", i.getArguments()[0]));
+
+        when(runnerService.run(any(Student.class))).thenReturn(new TestResult(new Student("Test", "Student")));
     }
 
     @Test
@@ -59,7 +64,11 @@ public class ApplicationCommandTest {
     @Test
     public void testShowResultTest() {
         Student mockStudent = new Student("Joshua", "Bloch");
-        TestResult mockTestResult = new TestResult(mockStudent);
+        when(studentService.determineCurrentStudent()).thenReturn(mockStudent);
+
+        commands.login();
+        commands.runTest();
+
         commands.showResultTest();
         verify(resultService).showResult(any(TestResult.class));
     }

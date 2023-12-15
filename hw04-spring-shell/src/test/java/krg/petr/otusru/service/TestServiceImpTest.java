@@ -14,6 +14,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +24,15 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest(properties = {"spring.shell.interactive.enabled=false"})
 @DisplayName("Test TestServiceImp")
 public class TestServiceImpTest {
 
-    @Mock
+    @MockBean
     private QuestionDao csvQuestionDao;
-    @Mock
+    @MockBean
     private LocalizedIOService localizedIOService;
-    @InjectMocks
+    @Autowired
     private TestServiceImpl testService;
     private TestResult testResult;
     private List<Question> expectedQuestions;

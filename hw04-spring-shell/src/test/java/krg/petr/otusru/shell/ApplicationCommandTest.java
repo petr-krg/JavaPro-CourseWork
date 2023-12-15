@@ -8,9 +8,9 @@ import krg.petr.otusru.service.StudentService;
 import krg.petr.otusru.service.TestRunnerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.MessageSource;
 import java.util.Locale;
 
@@ -23,18 +23,18 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(properties = {"spring.shell.interactive.enabled=false"})
 public class ApplicationCommandTest {
 
-    @Mock
+    @MockBean
     private AppConfig appConfig;
-    @Mock
+    @MockBean
     private StudentService studentService;
-    @Mock
+    @MockBean
     private ResultService resultService;
-    @Mock
+    @MockBean
     private TestRunnerService runnerService;
-    @Mock
+    @MockBean
     private MessageSource messageSource;
 
-    @InjectMocks
+    @Autowired
     private ApplicationCommands commands;
 
     @BeforeEach

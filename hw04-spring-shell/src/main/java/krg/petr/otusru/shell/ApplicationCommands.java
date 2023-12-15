@@ -3,9 +3,7 @@ package krg.petr.otusru.shell;
 import krg.petr.otusru.config.AppConfig;
 import krg.petr.otusru.domain.Student;
 import krg.petr.otusru.domain.TestResult;
-import krg.petr.otusru.service.TestRunnerService;
-import krg.petr.otusru.service.StudentService;
-import krg.petr.otusru.service.ResultService;
+import krg.petr.otusru.service.ServiceFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.MessageSource;
@@ -22,25 +20,19 @@ public class ApplicationCommands {
 
     private final AppConfig appConfig;
 
-    private final TestRunnerService runnerService;
-    
-    private final StudentService studentService;
-    
-    private final ResultService resultService;
-    
+    private final ServiceFacade serviceFacade;
+
     private final MessageSource messageSource;
     
     private TestResult testResult;
-    
+
     private Student student;
 
     @Autowired
-    public ApplicationCommands(AppConfig appConfig, ConfigurableApplicationContext context, TestRunnerService runnerService, StudentService studentService,
-                               ResultService resultService, MessageSource messageSource) {
+    public ApplicationCommands(AppConfig appConfig, ConfigurableApplicationContext context,
+                               ServiceFacade serviceFacade, MessageSource messageSource) {
         this.appConfig = appConfig;
-        this.runnerService = runnerService;
-        this.studentService = studentService;
-        this.resultService = resultService;
+        this.serviceFacade = serviceFacade;
         this.messageSource = messageSource;
     }
 
@@ -64,20 +56,19 @@ public class ApplicationCommands {
 
     @ShellMethod(value = "Login command", key = {"l", "login"})
     public void login() {
-        student = studentService.determineCurrentStudent();
+        student = serviceFacade.determineCurrentStudent();
     }
 
     @ShellMethod(value = "Run test command", key = {"r", "run"})
     @ShellMethodAvailability(value = "isRunTestCommandAvailable")
     public void runTest() {
-        testResult = runnerService.run(student);
+        testResult = serviceFacade.run(student);
     }
 
     @ShellMethod(value = "Show test result command", key = "str")
     @ShellMethodAvailability(value = "isShowTestResultCommandAvailable")
-    public String showResultTest() {
-        resultService.showResult(testResult);
-        return "";
+    public void showResultTest() {
+        serviceFacade.showResult(testResult);
     }
 
     @ShellMethod(value = "Exit the application", key = {"x", "exit"})

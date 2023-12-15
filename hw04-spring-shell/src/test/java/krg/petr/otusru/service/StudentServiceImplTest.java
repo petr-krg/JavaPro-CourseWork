@@ -1,34 +1,36 @@
 package krg.petr.otusru.service;
 
 import krg.petr.otusru.domain.Student;
-import krg.petr.otusru.service.LocalizedIOService;
-import krg.petr.otusru.service.StudentServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@TestPropertySource(properties = {"spring.shell.interactive.enabled=false"})
 @DisplayName("Test StudentServiceImplTest")
 public class StudentServiceImplTest {
 
-    @Mock
+    @MockBean
     private LocalizedIOService localizedIOService;
 
-    @InjectMocks
-    private StudentServiceImpl studentService;
+    @Autowired
+    private StudentService studentService;
 
     @BeforeEach
     void setUp() {
-        when(localizedIOService.readStringWithPromptLocalized("StudentService.input.first.name")).thenReturn("Joshua");
-        when(localizedIOService.readStringWithPromptLocalized("StudentService.input.last.name")).thenReturn("Bloch");
+        when(localizedIOService.readStringWithPromptLocalized("StudentService.input.first.name"))
+                .thenReturn("Joshua");
+        when(localizedIOService.readStringWithPromptLocalized("StudentService.input.last.name"))
+                .thenReturn("Bloch");
+        studentService = new StudentServiceImpl(localizedIOService);
     }
 
     @Test
@@ -39,5 +41,12 @@ public class StudentServiceImplTest {
                 () -> assertEquals("Joshua", expectedStudent.firstName()),
                 () -> assertEquals("Bloch", expectedStudent.lastName())
         );
+    }
+
+    @Test
+    @DisplayName("Get Student Full Name")
+    public void getStudentFullName() {
+        Student expectedStudent = studentService.determineCurrentStudent();
+        assertEquals("Joshua Bloch", expectedStudent.getFullName());
     }
 }

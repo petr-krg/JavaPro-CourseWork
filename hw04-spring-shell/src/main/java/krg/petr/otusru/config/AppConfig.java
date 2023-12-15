@@ -2,6 +2,7 @@ package krg.petr.otusru.config;
 
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
 import java.util.Locale;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ public class AppConfig implements TestConfig, TestFileNameProvider, LocaleConfig
         this.locale = Locale.forLanguageTag(locale);
     }
 
-    public void setFileNameByLocaleTag (Map<String, String> fileNameByLocaleTag) {
+    public void setFileNameByLocaleTag(Map<String, String> fileNameByLocaleTag) {
         this.fileNameByLocaleTag = fileNameByLocaleTag;
     }
 
@@ -42,3 +43,4 @@ public class AppConfig implements TestConfig, TestFileNameProvider, LocaleConfig
         return this.locale;
     }
 }
+

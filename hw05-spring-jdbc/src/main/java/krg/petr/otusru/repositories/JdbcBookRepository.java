@@ -17,7 +17,12 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -190,7 +195,6 @@ public class JdbcBookRepository implements BookRepository {
         public List<Book> extractData(ResultSet rs) throws SQLException, DataAccessException {
             Map<Long, Book> books = new HashMap<>();
             boolean isGenreId = verifyResultSetColumn(rs, "g_id");
-
             while (rs.next()) {
                 long id = rs.getLong("id");
                 Book book = books.get(id);
@@ -199,14 +203,12 @@ public class JdbcBookRepository implements BookRepository {
                     long authorId = rs.getLong("author_id");
                     String authorName = rs.getString("full_name");
                     Author author = new Author(authorId, authorName);
-
                     String title = rs.getString("title");
                     List<Genre> genres = new ArrayList<>();
 
                     book = new Book(id, title, author, genres);
                     books.put(id, book);
                 }
-
                 if (isGenreId) {
                     long genreId = rs.getLong("g_id");
                     String genreName = rs.getString("name");
@@ -225,7 +227,7 @@ public class JdbcBookRepository implements BookRepository {
                 String mdColumnLabel = rsMetaData.getColumnLabel(i);
 
                 if (nameColumn.toUpperCase().equals(mdColumnName) ||
-                        nameColumn.toUpperCase().equals(mdColumnLabel)){
+                        nameColumn.toUpperCase().equals(mdColumnLabel)) {
                     return true;
                 }
             }

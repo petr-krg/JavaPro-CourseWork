@@ -8,7 +8,10 @@ import krg.petr.otusru.models.Author;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class JdbcAuthorRepository implements AuthorRepository {
@@ -39,7 +42,7 @@ public class JdbcAuthorRepository implements AuthorRepository {
             );
 
             return Optional.ofNullable(result);
-        } catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
     }

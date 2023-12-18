@@ -18,8 +18,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(classes = CsvQuestionDao.class,
-        properties = {"spring.shell.interactive.enabled=false"})
+@SpringBootTest(classes = CsvQuestionDao.class)
 @DisplayName("Test CsvQuestionDao")
 public class CsvQuestionDaoTest {
 

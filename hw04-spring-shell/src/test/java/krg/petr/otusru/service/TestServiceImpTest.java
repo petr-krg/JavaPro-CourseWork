@@ -21,8 +21,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(classes = TestServiceImpl.class,
-        properties = {"spring.shell.interactive.enabled=false"})
+@SpringBootTest(classes = TestServiceImpl.class)
 @DisplayName("Test TestServiceImp")
 public class TestServiceImpTest {
 

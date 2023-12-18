@@ -3,7 +3,7 @@ package krg.petr.otusru.shell;
 import krg.petr.otusru.config.AppConfig;
 import krg.petr.otusru.domain.Student;
 import krg.petr.otusru.domain.TestResult;
-import krg.petr.otusru.service.LocalizedMessagesService;
+import krg.petr.otusru.service.LocalizedIOService;
 import krg.petr.otusru.service.ResultService;
 import krg.petr.otusru.service.StudentService;
 import krg.petr.otusru.service.TestRunnerService;
@@ -21,7 +21,7 @@ public class ApplicationCommands {
 
     private final AppConfig appConfig;
 
-    private final LocalizedMessagesService localizedMessagesService;
+    private final LocalizedIOService localizedIOService;
 
     private final TestRunnerService testRunnerService;
 
@@ -34,11 +34,11 @@ public class ApplicationCommands {
     private Student student;
 
     @Autowired
-    public ApplicationCommands(AppConfig appConfig, LocalizedMessagesService localizedMessagesService,
+    public ApplicationCommands(AppConfig appConfig, LocalizedIOService localizedIOService,
                                TestRunnerService testRunnerService, StudentService studentService,
                                ResultService resultService) {
         this.appConfig = appConfig;
-        this.localizedMessagesService = localizedMessagesService;
+        this.localizedIOService = localizedIOService;
         this.testRunnerService = testRunnerService;
         this.studentService = studentService;
         this.resultService = resultService;
@@ -86,6 +86,6 @@ public class ApplicationCommands {
     }
 
     private String getLocalizeText(String code, Object ...args) {
-        return localizedMessagesService.getMessage(code,  args, appConfig.getLocale());
+        return localizedIOService.getMessage(code,  args, appConfig.getLocale());
     }
 }

@@ -12,8 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(classes = StudentServiceImpl.class,
-        properties = {"spring.shell.interactive.enabled=false"})
+@SpringBootTest(classes = StudentServiceImpl.class)
 @DisplayName("Test StudentServiceImplTest")
 public class StudentServiceImplTest {
 

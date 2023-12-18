@@ -5,15 +5,9 @@ import krg.petr.otusru.domain.Answer;
 import krg.petr.otusru.domain.Question;
 import krg.petr.otusru.domain.Student;
 import krg.petr.otusru.domain.TestResult;
-import krg.petr.otusru.service.LocalizedIOService;
-import krg.petr.otusru.service.TestServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,9 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest(properties = {"spring.shell.interactive.enabled=false"})
+@SpringBootTest(classes = TestServiceImpl.class,
+        properties = {"spring.shell.interactive.enabled=false"})
 @DisplayName("Test TestServiceImp")
 public class TestServiceImpTest {
 

@@ -1,13 +1,11 @@
 package krg.petr.otusru.config;
 
 import lombok.NoArgsConstructor;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.Locale;
 import java.util.Map;
 
 @NoArgsConstructor
-@ConfigurationProperties(prefix = "test")
 public class AppConfig implements TestConfig, TestFileNameProvider, LocaleConfig {
 
     private int rightAnswersCountToPass;
@@ -43,4 +41,3 @@ public class AppConfig implements TestConfig, TestFileNameProvider, LocaleConfig
         return this.locale;
     }
 }
-

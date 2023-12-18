@@ -1,7 +1,6 @@
 package krg.petr.otusru.dao;
 
 import krg.petr.otusru.config.TestFileNameProvider;
-import krg.petr.otusru.dao.CsvQuestionDao;
 import krg.petr.otusru.domain.Answer;
 import krg.petr.otusru.domain.Question;
 import krg.petr.otusru.exceptions.QuestionReadException;
@@ -9,27 +8,29 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@SpringBootTest(classes = CsvQuestionDao.class,
+        properties = {"spring.shell.interactive.enabled=false"})
 @DisplayName("Test CsvQuestionDao")
 public class CsvQuestionDaoTest {
 
+    @MockBean
     private TestFileNameProvider testFileProvider;
+    @Autowired
     private CsvQuestionDao csvQuestionDao;
     private List<Question> expectedQuestions;
 
     @BeforeEach
     public void setUp() {
-        testFileProvider = mock(TestFileNameProvider.class);
-        BDDMockito.given(testFileProvider.getTestFileName()).willReturn("questions.csv");
-        csvQuestionDao = new CsvQuestionDao(testFileProvider);
         expectedQuestions = new ArrayList<>();
 
         expectedQuestions.add(new Question("Is there life on Mars?", List.of(
@@ -77,9 +78,8 @@ public class CsvQuestionDaoTest {
     @Test
     @DisplayName("Test find all, success")
     public void testFindAllSuccess() {
-
+        when(testFileProvider.getTestFileName()).thenReturn("questions.csv");
         List<Question> actualQuestions = csvQuestionDao.findAll();
-
         Assertions.assertIterableEquals(expectedQuestions, actualQuestions);
     }
 

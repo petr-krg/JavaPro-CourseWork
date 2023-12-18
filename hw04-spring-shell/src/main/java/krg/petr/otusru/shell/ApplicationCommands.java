@@ -3,10 +3,11 @@ package krg.petr.otusru.shell;
 import krg.petr.otusru.config.AppConfig;
 import krg.petr.otusru.domain.Student;
 import krg.petr.otusru.domain.TestResult;
-import krg.petr.otusru.service.ServiceFacade;
+import krg.petr.otusru.service.LocalizedMessagesService;
+import krg.petr.otusru.service.ResultService;
+import krg.petr.otusru.service.StudentService;
+import krg.petr.otusru.service.TestRunnerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.MessageSource;
 import org.springframework.shell.Availability;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -20,20 +21,27 @@ public class ApplicationCommands {
 
     private final AppConfig appConfig;
 
-    private final ServiceFacade serviceFacade;
+    private final LocalizedMessagesService localizedMessagesService;
 
-    private final MessageSource messageSource;
+    private final TestRunnerService testRunnerService;
+
+    private final StudentService studentService;
+
+    private final ResultService resultService;
     
     private TestResult testResult;
 
     private Student student;
 
     @Autowired
-    public ApplicationCommands(AppConfig appConfig, ConfigurableApplicationContext context,
-                               ServiceFacade serviceFacade, MessageSource messageSource) {
+    public ApplicationCommands(AppConfig appConfig, LocalizedMessagesService localizedMessagesService,
+                               TestRunnerService testRunnerService, StudentService studentService,
+                               ResultService resultService) {
         this.appConfig = appConfig;
-        this.serviceFacade = serviceFacade;
-        this.messageSource = messageSource;
+        this.localizedMessagesService = localizedMessagesService;
+        this.testRunnerService = testRunnerService;
+        this.studentService = studentService;
+        this.resultService = resultService;
     }
 
     @ShellMethod(value = "Show current locale command", key = "cl")
@@ -48,32 +56,21 @@ public class ApplicationCommands {
         return getLocalizeText("command.change.locale", appConfig.getLocale());
     }
 
-    @ShellMethod(value = "About command", key = {"a", "about"})
-    public String about() {
-        return getLocalizeText("command.about");
-
-    }
-
     @ShellMethod(value = "Login command", key = {"l", "login"})
     public void login() {
-        student = serviceFacade.determineCurrentStudent();
+        student = studentService.determineCurrentStudent();
     }
 
     @ShellMethod(value = "Run test command", key = {"r", "run"})
     @ShellMethodAvailability(value = "isRunTestCommandAvailable")
     public void runTest() {
-        testResult = serviceFacade.run(student);
+        testResult = testRunnerService.run(student);
     }
 
     @ShellMethod(value = "Show test result command", key = "str")
     @ShellMethodAvailability(value = "isShowTestResultCommandAvailable")
     public void showResultTest() {
-        serviceFacade.showResult(testResult);
-    }
-
-    @ShellMethod(value = "Exit the application", key = {"x", "exit"})
-    public void exitApplication() {
-        System.exit(0);
+        resultService.showResult(testResult);
     }
 
     private Availability isRunTestCommandAvailable() {
@@ -89,6 +86,6 @@ public class ApplicationCommands {
     }
 
     private String getLocalizeText(String code, Object ...args) {
-        return messageSource.getMessage(code,  args, appConfig.getLocale());
+        return localizedMessagesService.getMessage(code,  args, appConfig.getLocale());
     }
 }

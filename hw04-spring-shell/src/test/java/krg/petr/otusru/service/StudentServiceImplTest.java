@@ -7,14 +7,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
-@TestPropertySource(properties = {"spring.shell.interactive.enabled=false"})
+@SpringBootTest(classes = StudentServiceImpl.class,
+        properties = {"spring.shell.interactive.enabled=false"})
 @DisplayName("Test StudentServiceImplTest")
 public class StudentServiceImplTest {
 
@@ -30,7 +29,6 @@ public class StudentServiceImplTest {
                 .thenReturn("Joshua");
         when(localizedIOService.readStringWithPromptLocalized("StudentService.input.last.name"))
                 .thenReturn("Bloch");
-        studentService = new StudentServiceImpl(localizedIOService);
     }
 
     @Test

@@ -85,8 +85,7 @@ public class CsvQuestionDaoTest {
     @Test
     @DisplayName("Test find all, failure")
     public void testFindAllFailure() {
-        String wrongFileName = "/nonexistent-questions.csv";
-        when(testFileProvider.getTestFileName()).thenReturn(wrongFileName);
+        when(testFileProvider.getTestFileName()).thenReturn("/nonexistent-questions.csv");
         assertThrows(QuestionReadException.class, csvQuestionDao::findAll);
     }
 }

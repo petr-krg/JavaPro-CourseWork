@@ -1,7 +1,6 @@
 package krg.petr.otusru.repositories;
 
 import krg.petr.otusru.models.Author;
-import krg.petr.otusru.models.Book;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

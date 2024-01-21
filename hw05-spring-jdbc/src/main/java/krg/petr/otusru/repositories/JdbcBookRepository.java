@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -37,9 +38,9 @@ public class JdbcBookRepository implements BookRepository {
         var result = namedParameterJdbcOperations.query(
                 "SELECT b.id , b.title, b.author_id, a.full_name, g.id AS g_id, g.name " +
                         "FROM books b " +
-                        "JOIN authors a ON b.author_id = a.id " +
-                        "LEFT JOIN books_genres bg ON b.id = bg.book_id " +
-                        "LEFT JOIN genres g ON g.id = bg.genre_id " +
+                        "   JOIN authors a ON b.author_id = a.id " +
+                        "   LEFT JOIN books_genres bg ON b.id = bg.book_id " +
+                        "   LEFT JOIN genres g ON g.id = bg.genre_id " +
                         "WHERE b.id = :id",
                 Collections.singletonMap("id", id),
                 new BookResultSetExtractor()
@@ -83,7 +84,12 @@ public class JdbcBookRepository implements BookRepository {
                 "SELECT b.id, b.title, b.author_id, a.full_name " +
                         "FROM books b " +
                         "JOIN authors a ON b.author_id = a.id",
-                new BookResultSetExtractor()
+                (rs, rowNum) -> new Book(
+                        rs.getLong("id"),
+                        rs.getString("title"),
+                        new Author(rs.getLong("author_id"), rs.getString("full_name")),
+                        new ArrayList<>()
+                )
         );
     }
 
@@ -91,34 +97,24 @@ public class JdbcBookRepository implements BookRepository {
         return namedParameterJdbcOperations.query(
                 "SELECT book_id, genre_id " +
                         "FROM books_genres",
-                new BookGenreRelationExtractor()
+                (rs, rowNum) -> new BookGenreRelation(rs.getLong("book_id"), rs.getLong("genre_id"))
         );
     }
 
     private void mergeBooksInfo(List<Book> booksWithoutGenres, List<Genre> genres,
                                 List<BookGenreRelation> relations) {
-        Map<Long, List<Long>> relationsMap = new HashMap<>();
+        Map<Long, Genre> genreMap = genres.stream()
+                .collect(Collectors.toMap(Genre::getId, genre -> genre));
+
+        Map<Long, List<Genre>> relationsMap = new HashMap<>();
         for (BookGenreRelation relation : relations) {
-            relationsMap.computeIfAbsent(relation.bookId(), k ->
-                    new ArrayList<>()).add(relation.genreId());
+            relationsMap.computeIfAbsent(relation.bookId(), k -> new ArrayList<>())
+                    .add(genreMap.get(relation.genreId()));
         }
 
-        Map<Long, Book> bookMap = new HashMap<>();
         for (Book book : booksWithoutGenres) {
-            bookMap.put(book.getId(), book);
-        }
-
-        Map<Long, Genre> genreMap = new HashMap<>();
-        for (Genre genre : genres) {
-            genreMap.put(genre.getId(), genre);
-        }
-
-        for (Map.Entry<Long, List<Long>> entry : relationsMap.entrySet()) {
-            List<Genre> genresOfBook = new ArrayList<>();
-            for (Long genreId : entry.getValue()) {
-                genresOfBook.add(genreMap.get(genreId));
-            }
-            bookMap.get(entry.getKey()).setGenres(genresOfBook);
+            List<Genre> genresOfBook = relationsMap.getOrDefault(book.getId(), new ArrayList<>());
+            book.setGenres(genresOfBook);
         }
     }
 

@@ -3,10 +3,12 @@ package krg.petr.otusru.repositories.impl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import krg.petr.otusru.models.Book;
 import krg.petr.otusru.models.Comment;
 import krg.petr.otusru.repositories.CommentRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,10 +25,15 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public List<Comment> findByBookId(Long id) {
+        Book book = entityManager.find(Book.class, id);
+
+        if (book == null) {
+            return Collections.emptyList();
+        }
+
         TypedQuery<Comment> query = entityManager.createQuery(
                 "SELECT c FROM Comment c " +
-                   "   JOIN FETCH c.book " +
-                   "WHERE c.book.id = :id", Comment.class);
+                        "WHERE c.book.id = :id", Comment.class);
         query.setParameter("id", id);
         return query.getResultList();
     }

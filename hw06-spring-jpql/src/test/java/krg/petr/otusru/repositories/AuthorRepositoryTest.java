@@ -41,10 +41,9 @@ public class AuthorRepositoryTest {
     @Test
     void shouldReturnCorrectAuthorById() {
         Author expectedAuthor = entityManager.find(Author.class, 1L);
-        var actualAuthors = authorRepository.findById(expectedAuthor.getId());
-        assertThat(actualAuthors)
-                .isPresent()
-                .get()
-                .isEqualTo(expectedAuthor);
+        var actualAuthorsOptional = authorRepository.findById(expectedAuthor.getId());
+        assertThat(actualAuthorsOptional).isPresent();
+        var actualAuthor = actualAuthorsOptional.get();
+        assertThat(actualAuthor).isEqualTo(expectedAuthor);
     }
 }

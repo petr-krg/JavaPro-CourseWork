@@ -5,10 +5,12 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import krg.petr.otusru.models.Book;
+import krg.petr.otusru.models.dtos.BookDTO;
 import krg.petr.otusru.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,23 +25,31 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public Optional<Book> findById(long id) {
-        List<Book> books = entityManager.createQuery(
-                        "SELECT b FROM Book b " +
-                           "    LEFT JOIN FETCH b.author a " +
-                           "    LEFT JOIN FETCH b.genres g " +
-                           "WHERE b.id = :id", Book.class)
-                .setParameter("id", id)
-                .getResultList();
+        EntityGraph<?> entityGraph = entityManager.getEntityGraph("book-author-genres-graph");
 
-        return books.isEmpty() ? Optional.empty() : Optional.of(books.get(0));
+        Book book = entityManager.find(Book.class, id,
+                Collections.singletonMap("javax.persistence.fetchgraph", entityGraph));
+
+        return Optional.ofNullable(book);
     }
 
     @Override
     public List<Book> findAll() {
-        EntityGraph<?> entityGraph = entityManager.getEntityGraph("book-author-genres-graph");
-        TypedQuery<Book> query = entityManager.createQuery("SELECT b FROM Book b", Book.class);
-        query.setHint(FETCH.getKey(), entityGraph);
-        return query.getResultList();
+        return entityManager.createQuery(
+                "SELECT b FROM Book b " +
+                        "   JOIN FETCH b.author a " +
+                        "   LEFT JOIN FETCH b.genres g ", Book.class)
+                .getResultList();
+    }
+
+    // прочитал про такой способ, решил попробовать, так сказать проба пера)
+    public List<BookDTO> findAllBookDTO() {
+        return entityManager.createQuery(
+                "SELECT new krg.petr.otusru.models.dtos.BookDTO(b.id, b.title, a.fullName, g.id, g.name) " +
+                        "   FROM Book b " +
+                        "       JOIN FETCH b.author a" +
+                        "       LEFT JOIN FETCH b.genres g ", BookDTO.class)
+                .getResultList();
     }
 
     @Override

@@ -49,7 +49,7 @@ public class GenreRepositoryTest {
     void shouldReturnCorrectGenreById() {
         Genre expectedGenre = entityManager.find(Genre.class, 1L);
         var actualGenres = genreRepository.findAllByIds(Set.of(expectedGenre.getId()));
-        //noinspection OptionalGetWithoutIsPresent
+
         assertThat(actualGenres.
                 stream()
                 .findAny()

@@ -22,7 +22,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"id", "title"})
+@EqualsAndHashCode(of = {"id"})
 @Entity
 @Table(name = "books")
 @NamedEntityGraph(name = "book-author-genres-graph",

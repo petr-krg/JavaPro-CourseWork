@@ -19,6 +19,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import({CommentRepositoryImpl.class})
 public class CommentRepositoryTest {
 
+    final Long COMMENT_ID = 1L;
+
     @Autowired
     private TestEntityManager entityManager;
 
@@ -28,10 +30,11 @@ public class CommentRepositoryTest {
     @DisplayName("должен загружать комментарий по id")
     @Test
     void shouldReturnCorrectCommentById() {
-        Comment expectedComment = entityManager.find(Comment.class, 1L);
+        var expectedComment = entityManager.find(Comment.class, COMMENT_ID);
         var actualComment = commentRepository.findById(expectedComment.getId());
 
-        assertThat(actualComment).isPresent()
+        assertThat(actualComment)
+                .isPresent()
                 .get()
                 .isEqualTo(expectedComment);
     }
@@ -39,35 +42,36 @@ public class CommentRepositoryTest {
     @DisplayName("должен сохранять измененный комментарий")
     @Test
     void shouldSaveUpdatedComment() {
-        var expectedComment = new Comment(1L, "update comment",
+        var expectedComment = entityManager.find(Comment.class, COMMENT_ID);
+        assertThat(expectedComment).isNotNull();
+
+        var updateComment = new Comment(COMMENT_ID, "update comment",
                 entityManager.find(Book.class, 1L));
 
-        assertThat(commentRepository.findById(expectedComment.getId()))
-                .isPresent()
-                .get()
-                .isNotEqualTo(expectedComment);
+        assertThat(expectedComment.getText())
+                .isNotEqualTo(updateComment.getText());
 
-        var returnedComment = commentRepository.save(expectedComment);
-        assertThat(returnedComment).isNotNull()
-                .matches(comment -> comment.getId() > 0)
-                .usingRecursiveComparison()
-                .ignoringExpectedNullFields()
-                .isEqualTo(expectedComment);
+        commentRepository.save(updateComment);
+        entityManager.flush();
+        entityManager.clear();
 
-        assertThat(commentRepository.findById(returnedComment.getId()))
-                .isPresent()
-                .get()
-                .isEqualTo(returnedComment);
-
+        var saveComment = entityManager.find(Comment.class, COMMENT_ID);
+        assertThat(saveComment.getText())
+                .isEqualTo(updateComment.getText());
     }
 
     @DisplayName("должен удалять комментарий по id ")
     @Test
     void shouldDeleteComment() {
-        Optional<Comment> comment = commentRepository.findById(1L);
-        assertThat(commentRepository.findById(1L)).isPresent();
-        commentRepository.delete(comment.get());
-        assertThat(commentRepository.findById(1L)).isEmpty();
+        var expectedComment = entityManager.find(Comment.class, COMMENT_ID);
+        assertThat(expectedComment).isNotNull();
+
+        commentRepository.delete(expectedComment);
+        entityManager.flush();
+        entityManager.clear();
+
+        var deleteComment = entityManager.find(Comment.class, COMMENT_ID);
+        assertThat(deleteComment).isNull();
     }
 
 

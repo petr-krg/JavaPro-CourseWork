@@ -17,7 +17,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("Репозиторий на основе Jdbc для работы с книгами ")
+@DisplayName("Репозиторий на основе JPA для работы с книгами ")
 @DataJpaTest
 @Import({BookRepositoryImpl.class, GenreRepositoryImpl.class})
 class BookRepositoryTest {
@@ -83,7 +83,7 @@ class BookRepositoryTest {
         assertThat(bookRepository.findById(expectedBook.getId()))
                 .isPresent()
                 .get()
-                .isNotEqualTo(expectedBook);
+                .isEqualTo(expectedBook);
 
         var returnedBook = bookRepository.save(expectedBook);
         assertThat(returnedBook).isNotNull()

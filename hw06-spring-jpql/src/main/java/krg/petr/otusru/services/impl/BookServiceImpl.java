@@ -1,6 +1,7 @@
 package krg.petr.otusru.services.impl;
 
 import krg.petr.otusru.exceptions.EntityNotFoundException;
+import krg.petr.otusru.models.Genre;
 import krg.petr.otusru.services.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> findAll() {
-        return bookRepository.findAll();
+        List<Book> books = bookRepository.findAll();
+        books.forEach(book -> book.getGenres().size());
+        return books;
     }
 
     @Override

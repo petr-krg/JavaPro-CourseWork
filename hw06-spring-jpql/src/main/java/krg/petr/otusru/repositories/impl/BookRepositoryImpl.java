@@ -3,8 +3,8 @@ package krg.petr.otusru.repositories.impl;
 import jakarta.persistence.EntityGraph;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
 import krg.petr.otusru.models.Book;
+import krg.petr.otusru.models.Genre;
 import krg.petr.otusru.models.dtos.BookDTO;
 import krg.petr.otusru.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +13,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import static org.springframework.data.jpa.repository.EntityGraph.EntityGraphType.FETCH;
 
 @Repository
 @RequiredArgsConstructor
@@ -37,8 +35,7 @@ public class BookRepositoryImpl implements BookRepository {
     public List<Book> findAll() {
         return entityManager.createQuery(
                 "SELECT b FROM Book b " +
-                        "   JOIN FETCH b.author a " +
-                        "   LEFT JOIN FETCH b.genres g ", Book.class)
+                        "   JOIN FETCH b.author a ", Book.class)
                 .getResultList();
     }
 
@@ -54,6 +51,11 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public Book save(Book book) {
+        List<Genre> mergedGenres = book.getGenres().stream()
+                .map(entityManager::merge)
+                .toList();
+        book.setGenres(mergedGenres);
+
         if (book.getId() == 0) {
             return insert(book);
         }

@@ -1,7 +1,6 @@
 package krg.petr.otusru.services.impl;
 
 import krg.petr.otusru.exceptions.EntityNotFoundException;
-import krg.petr.otusru.models.Genre;
 import krg.petr.otusru.services.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,11 +27,13 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Book> findById(long id) {
         return bookRepository.findById(id);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Book> findAll() {
         List<Book> books = bookRepository.findAll();
         books.forEach(book -> book.getGenres().size());
@@ -58,15 +59,13 @@ public class BookServiceImpl implements BookService {
     }
 
     private Book save(long id, String title, long authorId, Set<Long> genresIds) {
-
-        if (genresIds == null || isEmpty(genresIds)) {
+        if (isEmpty(genresIds)) {
             throw new IllegalArgumentException("Genres ids must not be null");
         }
 
-        var author = authorRepository.findById(authorId).get();
-
+        var author = authorRepository.findById(authorId)
+                .orElseThrow(() -> new EntityNotFoundException("Author with id %d not found".formatted(authorId)));
         var genres = genreRepository.findAllByIds(genresIds);
-
         if (isEmpty(genres) || genresIds.size() != genres.size()) {
             throw new EntityNotFoundException("One or all genres with ids %s not found".formatted(genresIds));
         }

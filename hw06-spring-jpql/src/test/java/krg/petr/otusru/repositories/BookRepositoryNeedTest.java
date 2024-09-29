@@ -2,6 +2,7 @@ package krg.petr.otusru.repositories;
 
 import krg.petr.otusru.repositories.impl.BookRepositoryImpl;
 import krg.petr.otusru.repositories.impl.GenreRepositoryImpl;
+import krg.petr.otusru.utils.TestDataGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,6 @@ import krg.petr.otusru.models.Book;
 import krg.petr.otusru.models.Genre;
 
 import java.util.List;
-import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,14 +35,14 @@ class BookRepositoryNeedTest {
 
     @BeforeEach
     void setUp() {
-        dbAuthors = getDbAuthors();
-        dbGenres = getDbGenres();
-        dbBooks = getDbBooks(dbAuthors, dbGenres);
+        dbAuthors = TestDataGenerator.getDbAuthors();
+        dbGenres = TestDataGenerator.getDbGenres();
+        dbBooks = TestDataGenerator.getDbBooks(dbAuthors, dbGenres);
     }
 
     @DisplayName("должен загружать книгу по id")
     @ParameterizedTest
-    @MethodSource("getDbBooks")
+    @MethodSource("krg.petr.otusru.utils.TestDataGenerator#getDbBooks")
     void shouldReturnCorrectBookById(Book expectedBook) {
         var actualBook = bookRepository.findById(expectedBook.getId());
         assertThat(actualBook)
@@ -69,11 +69,7 @@ class BookRepositoryNeedTest {
         var returnedBook = bookRepository.save(expectedBook);
         assertThat(returnedBook).isNotNull()
                 .matches(book -> book.getId() > 0)
-                .matches(book -> book.getTitle().equals(expectedBook.getTitle()));
-        // Так как у меня EqualsAndHashCode(of = {"id"}), то необходимо по полям, а не по объекту сравнивать
-        // для правильной работы и везде ниже так же код исправлен.
-        // Таким исправлением я не ломаю логику работы тестов.
-        //        .usingRecursiveComparison().ignoringExpectedNullFields().isEqualTo(expectedBook);
+                .usingRecursiveComparison().ignoringExpectedNullFields().isEqualTo(expectedBook);
 
         assertThat(bookRepository.findById(returnedBook.getId()))
                 .isPresent()
@@ -98,9 +94,8 @@ class BookRepositoryNeedTest {
         var returnedBook = bookRepository.save(expectedBook);
         assertThat(returnedBook).isNotNull()
                 .matches(book -> book.getId() > 0)
-                .matches(book -> book.getTitle().equals(expectedBook.getTitle()));
-//                .usingRecursiveComparison().ignoringExpectedNullFields()
-//                .isEqualTo(expectedBook);
+                .usingRecursiveComparison().ignoringExpectedNullFields()
+                .isEqualTo(expectedBook);
 
         assertThat(bookRepository.findById(returnedBook.getId()))
                 .isPresent()
@@ -114,33 +109,5 @@ class BookRepositoryNeedTest {
         assertThat(bookRepository.findById(1L)).isPresent();
         bookRepository.deleteById(1L);
         assertThat(bookRepository.findById(1L)).isEmpty();
-    }
-
-    private static List<Author> getDbAuthors() {
-        return IntStream.range(1, 4).boxed()
-                .map(id -> new Author(id, "Author_" + id))
-                .toList();
-    }
-
-    private static List<Genre> getDbGenres() {
-        return IntStream.range(1, 7).boxed()
-                .map(id -> new Genre(id, "Genre_" + id))
-                .toList();
-    }
-
-    private static List<Book> getDbBooks(List<Author> dbAuthors, List<Genre> dbGenres) {
-        return IntStream.range(1, 4).boxed()
-                .map(id -> new Book(id.longValue(),
-                        "BookTitle_" + id,
-                        dbAuthors.get(id - 1),
-                        dbGenres.subList((id - 1) * 2, (id - 1) * 2 + 2)
-                ))
-                .toList();
-    }
-
-    private static List<Book> getDbBooks() {
-        var dbAuthors = getDbAuthors();
-        var dbGenres = getDbGenres();
-        return getDbBooks(dbAuthors, dbGenres);
     }
 }

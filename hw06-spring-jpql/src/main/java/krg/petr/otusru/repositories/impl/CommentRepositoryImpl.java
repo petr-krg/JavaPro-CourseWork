@@ -6,6 +6,7 @@ import jakarta.persistence.TypedQuery;
 import krg.petr.otusru.models.Book;
 import krg.petr.otusru.models.Comment;
 import krg.petr.otusru.repositories.CommentRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
@@ -13,10 +14,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 public class CommentRepositoryImpl implements CommentRepository {
 
     @PersistenceContext
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     @Override
     public Optional<Comment> findById(Long id) {
@@ -40,10 +42,10 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public Comment save(Comment comment) {
-        if (comment.getId() == 0) {
-            return insert(comment);
+        if (comment.getId() != null && comment.getId() > 0) {
+            return update(comment);
         }
-        return update(comment);
+        return insert(comment);
     }
 
     @Override

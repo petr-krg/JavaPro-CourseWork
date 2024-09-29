@@ -34,4 +34,5 @@ public class GenreRepositoryImpl implements GenreRepository {
         query.setParameter("ids", ids);
         return query.getResultList();
     }
+
 }

@@ -16,4 +16,4 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
     show-sql: true
 app:
-  version: 0.0.1
+  version: 0.0.5

@@ -16,7 +16,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"id", "name"})
+@EqualsAndHashCode(of = {"id"})
 @Entity
 @Table(name = "genres")
 public class Genre {

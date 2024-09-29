@@ -56,10 +56,10 @@ public class BookRepositoryImpl implements BookRepository {
                 .toList();
         book.setGenres(mergedGenres);
 
-        if (book.getId() == 0) {
-            return insert(book);
+        if (book.getId() != null && book.getId() > 0) {
+            return update(book);
         }
-        return update(book);
+        return insert(book);
     }
 
     @Override

@@ -12,12 +12,13 @@ import org.springframework.context.annotation.Import;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+
 @DisplayName("Репозиторий на основе JPA для работы с комментариями к книгам ")
 @DataJpaTest
 @Import({CommentRepositoryImpl.class})
 public class CommentRepositoryTest {
 
-    final Long COMMENT_ID = 1L;
+    private final Long COMMENT_ID = 1L;
 
     @Autowired
     private TestEntityManager entityManager;

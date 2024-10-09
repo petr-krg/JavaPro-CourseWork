@@ -64,7 +64,7 @@ class BookRepositoryNeedTest {
     @DisplayName("должен сохранять новую книгу")
     @Test
     void shouldSaveNewBook() {
-        var expectedBook = new Book(0L, "BookTitle_10500", dbAuthors.get(0),
+        var expectedBook = new Book(null, "BookTitle_10500", dbAuthors.get(0),
                 List.of(dbGenres.get(0), dbGenres.get(2)));
         var returnedBook = bookRepository.save(expectedBook);
         assertThat(returnedBook).isNotNull()

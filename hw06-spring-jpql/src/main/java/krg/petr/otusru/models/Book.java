@@ -1,6 +1,5 @@
 package krg.petr.otusru.models;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -45,7 +44,7 @@ public class Book {
     @JoinColumn(name = "author_id")
     private Author author;
 
-    @ManyToMany(targetEntity = Genre.class, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToMany(targetEntity = Genre.class, fetch = FetchType.LAZY)
     @JoinTable(name = "books_genres", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
     @Fetch(FetchMode.SUBSELECT)

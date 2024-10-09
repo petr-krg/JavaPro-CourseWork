@@ -125,6 +125,7 @@ public class BookServiceImplTest {
 
         var expectedGenreNames = genreIds.stream()
                 .map(id -> dbGenres.stream()
+                        .filter(genre -> genre.getId().equals(id))
                         .findFirst()
                         .orElseThrow(() -> new IllegalArgumentException("Genre not found with ID: " + id))
                         .getName())

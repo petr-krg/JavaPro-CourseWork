@@ -2,7 +2,6 @@ package krg.petr.otusru.models.dtos;
 
 import krg.petr.otusru.models.Author;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter

@@ -54,7 +54,7 @@ class BookRepositoryTest {
     @DisplayName("должен сохранять новую книгу")
     @Test
     void shouldSaveNewBook() {
-        var expectedBook = new Book(0L, "BookTitle_100500", entityManager.find(Author.class, 1L),
+        var expectedBook = new Book(null, "BookTitle_100500", entityManager.find(Author.class, 1L),
                 List.of(entityManager.find(Genre.class, 1L),
                         entityManager.find(Genre.class, 2L)));
 

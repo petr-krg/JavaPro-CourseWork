@@ -4,7 +4,6 @@ import krg.petr.otusru.exceptions.EntityNotFoundException;
 import krg.petr.otusru.models.Author;
 import krg.petr.otusru.models.Book;
 import krg.petr.otusru.models.Genre;
-import krg.petr.otusru.models.dtos.BookDTO;
 import krg.petr.otusru.repositories.impl.AuthorRepositoryImpl;
 import krg.petr.otusru.repositories.impl.BookRepositoryImpl;
 import krg.petr.otusru.repositories.impl.GenreRepositoryImpl;

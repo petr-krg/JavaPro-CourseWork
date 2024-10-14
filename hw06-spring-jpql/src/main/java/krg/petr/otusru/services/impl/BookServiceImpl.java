@@ -1,6 +1,7 @@
 package krg.petr.otusru.services.impl;
 
 import krg.petr.otusru.exceptions.EntityNotFoundException;
+import krg.petr.otusru.models.dtos.BookDTO;
 import krg.petr.otusru.services.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import krg.petr.otusru.repositories.BookRepository;
 import krg.petr.otusru.repositories.GenreRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -56,6 +58,17 @@ public class BookServiceImpl implements BookService {
     @Transactional
     public void deleteById(long id) {
         bookRepository.deleteById(id);
+    }
+
+    // прочитал про такой способ, решил попробовать, так сказать проба пера)
+    public List<BookDTO> findAllBookDTO() {
+        List<Book> books = bookRepository.findAll();
+        books.forEach(book -> book.getGenres().size());
+
+        List<BookDTO> bookDTOs = new ArrayList<>();
+        books.forEach(book -> bookDTOs.add(new BookDTO(book)));
+
+        return bookDTOs;
     }
 
     private Book save(Long id, String title, Long authorId, Set<Long> genresIds) {

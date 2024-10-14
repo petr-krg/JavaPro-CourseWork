@@ -5,7 +5,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import krg.petr.otusru.models.Book;
 import krg.petr.otusru.models.Genre;
-import krg.petr.otusru.models.dtos.BookDTO;
 import krg.petr.otusru.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -33,19 +32,10 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public List<Book> findAll() {
-        return entityManager.createQuery(
-                "SELECT b FROM Book b " +
-                        "   JOIN FETCH b.author a ", Book.class)
-                .getResultList();
-    }
+        EntityGraph<?> entityGraph = entityManager.getEntityGraph("book-with-author");
 
-    // прочитал про такой способ, решил попробовать, так сказать проба пера)
-    public List<BookDTO> findAllBookDTO() {
-        return entityManager.createQuery(
-                "SELECT new krg.petr.otusru.models.dtos.BookDTO(b.id, b.title, a.fullName, g.id, g.name) " +
-                        "   FROM Book b " +
-                        "       JOIN FETCH b.author a" +
-                        "       LEFT JOIN FETCH b.genres g ", BookDTO.class)
+        return entityManager.createQuery("SELECT b FROM Book b", Book.class)
+                .setHint("javax.persistence.fetchgraph", entityGraph)
                 .getResultList();
     }
 

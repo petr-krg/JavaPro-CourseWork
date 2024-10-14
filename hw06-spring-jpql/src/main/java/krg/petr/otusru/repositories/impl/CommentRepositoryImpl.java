@@ -1,6 +1,7 @@
 package krg.petr.otusru.repositories.impl;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityGraph;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import krg.petr.otusru.models.Book;
@@ -21,12 +22,15 @@ public class CommentRepositoryImpl implements CommentRepository {
     private final EntityManager entityManager;
 
     @Override
-    public Optional<Comment> findById(Long id) {
-        return Optional.ofNullable(entityManager.find(Comment.class, id));
+    public Optional<Comment> findById(long id) {
+        EntityGraph<?> entityGraph = entityManager.getEntityGraph("comment-with-book");
+
+        return Optional.ofNullable(entityManager.find(Comment.class, id,
+                Collections.singletonMap("javax.persistence.fetchgraph", entityGraph)));
     }
 
     @Override
-    public List<Comment> findByBookId(Long id) {
+    public List<Comment> findByBookId(long id) {
         Book book = entityManager.find(Book.class, id);
 
         if (book == null) {

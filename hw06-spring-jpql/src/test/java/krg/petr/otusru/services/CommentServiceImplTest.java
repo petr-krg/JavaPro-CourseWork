@@ -27,14 +27,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional(propagation = Propagation.NEVER)
 public class CommentServiceImplTest {
 
-    private final Long FIRST_ID = 1L;
+    private static final Long FIRST_ID = 1L;
 
-    private final Long SECOND_ID = 2L;
+    private static final Long SECOND_ID = 2L;
 
-    private final int COUNT_COMMENTS_FIRST_ID = 2;
+    private static final int COUNT_COMMENTS_FIRST_ID = 2;
 
     @Autowired
     private CommentServiceImpl commentService;
+
+    @DisplayName("должен загружать комментарий по id")
+    @Test
+    void shouldReturnCorrectCommentById() {
+        var actualComment = commentService.findById(FIRST_ID);
+
+        assertThat(actualComment).isPresent();
+        assertThat(actualComment.get().getId()).isEqualTo(FIRST_ID);
+        assertThat(actualComment.get().getBook()).isNotNull();
+    }
 
     @DisplayName("должен загружать комментарий по id книги")
     @Test

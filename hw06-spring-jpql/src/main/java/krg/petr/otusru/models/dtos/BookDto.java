@@ -8,20 +8,20 @@ import java.util.List;
 
 @Setter
 @Getter
-public class BookDTO {
+public class BookDto {
 
     private Long id;
 
     private String title;
 
-    private AuthorDTO author;
+    private AuthorDto author;
 
-    private List<GenreDTO> genreName;
+    private List<GenreDto> genres;
 
-    public BookDTO(Book book) {
+    public BookDto(Book book) {
         this.id = book.getId();
         this.title = book.getTitle();
-        this.author = new AuthorDTO(book.getAuthor());
-        this.genreName = book.getGenres().stream().map(GenreDTO::new).toList();
+        this.author = new AuthorDto(book.getAuthor());
+        this.genres = book.getGenres().stream().map(GenreDto::new).toList();
     }
 }

@@ -7,13 +7,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class GenreDTO {
+public class GenreDto {
 
     private Long id;
 
     private String name;
 
-    public GenreDTO(Genre genre) {
+    public GenreDto(Genre genre) {
         this.id = genre.getId();
         this.name = genre.getName();
     }

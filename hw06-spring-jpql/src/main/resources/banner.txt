@@ -4,6 +4,6 @@ ${AnsiColor.BRIGHT_GREEN}  |     ___/|    __)_   |    |    |       _/    |      
 ${AnsiColor.BRIGHT_GREEN}  |    |    |        \  |    |    |    |   \    |    |  \  |    |   \    \_\  \
 ${AnsiColor.BRIGHT_GREEN}  |____|   /_______  /  |____|    |____|_  / /\ |____|__ \ |____|_  /\______  /
 ${AnsiColor.BRIGHT_GREEN}                   \/                    \/  \/         \/        \/        \/
-${AnsiColor.BRIGHT_YELLOW} :: Spring Boot      ::                                               (v${spring-boot.version})
-${AnsiColor.BRIGHT_CYAN} :: hw06-spring-jpql ::                                               (v${app.version})
+${AnsiColor.BRIGHT_YELLOW} :: Spring Boot      ::                         (v${spring-boot.version})
+${AnsiColor.BRIGHT_CYAN} :: hw06-spring-jpql ::                         (v${app.version})
 ${AnsiColor.DEFAULT}

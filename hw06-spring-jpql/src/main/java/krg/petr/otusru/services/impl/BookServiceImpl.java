@@ -1,7 +1,7 @@
 package krg.petr.otusru.services.impl;
 
 import krg.petr.otusru.exceptions.EntityNotFoundException;
-import krg.petr.otusru.models.dtos.BookDTO;
+import krg.petr.otusru.models.dtos.BookDto;
 import krg.petr.otusru.services.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,15 +11,14 @@ import krg.petr.otusru.repositories.BookRepository;
 import krg.petr.otusru.repositories.GenreRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import static org.springframework.util.CollectionUtils.isEmpty;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
     private final AuthorRepository authorRepository;
@@ -36,10 +35,11 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Book> findAll() {
+    public List<BookDto> findAll() {
         List<Book> books = bookRepository.findAll();
-        books.forEach(book -> book.getGenres().size());
-        return books;
+        return books.stream()
+                .map(BookDto::new)
+                .toList();
     }
 
     @Override
@@ -58,17 +58,6 @@ public class BookServiceImpl implements BookService {
     @Transactional
     public void deleteById(long id) {
         bookRepository.deleteById(id);
-    }
-
-    // прочитал про такой способ, решил попробовать, так сказать проба пера)
-    public List<BookDTO> findAllBookDTO() {
-        List<Book> books = bookRepository.findAll();
-        books.forEach(book -> book.getGenres().size());
-
-        List<BookDTO> bookDTOs = new ArrayList<>();
-        books.forEach(book -> bookDTOs.add(new BookDTO(book)));
-
-        return bookDTOs;
     }
 
     private Book save(Long id, String title, Long authorId, Set<Long> genresIds) {

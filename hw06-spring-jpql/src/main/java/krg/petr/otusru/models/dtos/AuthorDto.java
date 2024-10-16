@@ -6,13 +6,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AuthorDTO {
+public class AuthorDto {
 
     private Long id;
 
     private String fullName;
 
-    public AuthorDTO(Author author) {
+    public AuthorDto(Author author) {
         this.id = author.getId();
         this.fullName = author.getFullName();
     }
